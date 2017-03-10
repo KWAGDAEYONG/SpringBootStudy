@@ -2,6 +2,7 @@ package com.example.controller;
 
 
 import com.example.model.Book;
+import com.example.model.Reader;
 import com.example.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,7 +19,7 @@ import java.util.List;
 @Controller
 @RequestMapping("/")
 public class BookController {
-    private static final String reader = "craig";
+    //private static final String reader = "craig";
     private BookRepository repository;
 
     @Autowired
@@ -27,16 +28,17 @@ public class BookController {
     }
 
     @GetMapping
-    public String readerBooks(Model model){
+    public String readerBooks(Reader reader, Model model){
         List<Book> readingList = repository.findByReader(reader);
         if(readingList!=null){
             model.addAttribute("books",readingList);
+            model.addAttribute("reader",reader);
         }
         return "readingList";
     }
 
     @PostMapping
-    public String addToReadingList(Book book){
+    public String addToReadingList(Reader reader, Book book){
         book.setReader(reader);
         repository.save(book);
         return "redirect:/";
