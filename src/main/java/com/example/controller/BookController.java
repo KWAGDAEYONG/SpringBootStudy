@@ -3,8 +3,10 @@ package com.example.controller;
 
 import com.example.model.Book;
 import com.example.model.Reader;
+import com.example.properties.AmazonProperties;
 import com.example.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,10 +23,15 @@ import java.util.List;
 public class BookController {
     //private static final String reader = "craig";
     private BookRepository repository;
+    private AmazonProperties amazonProperties;
+    private String associateId;
+
+
 
     @Autowired
-    public void setRepository(BookRepository repository) {
+    public void setRepository(BookRepository repository, AmazonProperties amazonProperties){
         this.repository = repository;
+        this.amazonProperties = amazonProperties;
     }
 
     @GetMapping
@@ -33,8 +40,13 @@ public class BookController {
         if(readingList!=null){
             model.addAttribute("books",readingList);
             model.addAttribute("reader",reader);
+            model.addAttribute("amazonID",amazonProperties.getAssociateId());
         }
         return "readingList";
+    }
+
+    public void setAssociateId(String associateId) {
+        this.associateId = associateId;
     }
 
     @PostMapping
